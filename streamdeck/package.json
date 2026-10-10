@@ -1,6 +1,6 @@
 {
   "name": "openomsi-streamdeck",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Plugin Stream Deck pour openOMSI",
   "scripts": {
     "images": "node scripts/make-images.ts",
