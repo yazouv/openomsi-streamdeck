@@ -125,6 +125,19 @@ local function dev_state()
   return nil
 end
 
+-- La position de la boîte automatique : "D", "N" ou "R". La présélection du C2
+-- (C2_Getriebe_Gangvorwahl : 0 R, 1 N, 2 D), celle des bus d'OMSI et des Heuliez
+-- (antrieb_getr_gangvorwahl : 0 R, 1 N, 2 et plus D), sinon le rapport engagé.
+local function selector()
+  local v = omsi.var("C2_Getriebe_Gangvorwahl") or omsi.var("antrieb_getr_gangvorwahl")
+  if v == nil then
+    v = omsi.bus.gear()
+    if v == nil then return nil end
+    return v < 0 and "R" or v == 0 and "N" or "D"
+  end
+  return v < 0.5 and "R" or v < 1.5 and "N" or "D"
+end
+
 -- Combien de portes le bus a, d'après ses triggers de portes.
 local function door_count()
   local n = 0
@@ -200,6 +213,7 @@ local function snapshot()
       doors_open = bool(s.doors_open),
       doors = doorways(),
       dev = dev_state(),
+      selector = selector(),
       indicator = s.indicator,
       headlights = s.headlights,
       handbrake = bool(s.handbrake),
@@ -266,6 +280,18 @@ function commands.stopbrake()
 end
 
 -- Appuyer sur le clignotant déjà allumé l'éteint.
+-- La boîte automatique : D, N ou R, comme ses touches (automatic_D, automatic_N,
+-- automatic_R). Sur les Heuliez il faut appuyer sur le frein pour passer D ou R.
+function commands.gear(pos)
+  if pos ~= "D" and pos ~= "N" and pos ~= "R" then return false end
+  local name = "automatic_" .. pos
+  if has(name) then
+    omsi.trigger(name)
+    return true
+  end
+  return omsi.bus.action(name)
+end
+
 function commands.indicator(side)
   if side ~= "left" and side ~= "right" and side ~= "hazard" and side ~= "off" then
     return false

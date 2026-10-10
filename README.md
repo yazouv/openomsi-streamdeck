@@ -33,6 +33,7 @@ Télécharge les deux fichiers de la [dernière version](https://github.com/yazo
 | Phares | veilleuses, croisement ou route | allumée quand ce feu l'est |
 | Frein de parking | serre / desserre | rouge quand il est serré |
 | Moteur | démarre ou coupe le bus (comme Maj+U) | vert moteur tournant |
+| Boîte auto (D / N / R) | passe en D, N ou R (une touche par position) | allumée sur la position engagée |
 | Klaxon | klaxonne tant que la touche est enfoncée | |
 | Éclairage intérieur | allume / éteint | ambre quand allumé |
 | Vue | conducteur, passager, extérieur, caméra libre, à pied | allumée sur la vue active |
@@ -65,6 +66,13 @@ Le DEV s'allume d'après la variable `DEV`, `CG_active` ou `C2_CP_BT_Tuerfreigab
 première que le bus a). Pour un bus qui fait autrement : action **Bouton du bus**, choisis
 le trigger dans la liste (elle montre les boutons du bus que tu conduis) et, si tu veux
 qu'elle s'allume, la variable dans « Allumée si ».
+
+## Boîte automatique
+
+Les touches D, N et R appuient sur `automatic_D`, `automatic_N` et `automatic_R`, comme le
+clavier d'OMSI. La position engagée est lue dans `C2_Getriebe_Gangvorwahl` (Citaro C2) ou
+`antrieb_getr_gangvorwahl` (bus d'OMSI, Heuliez…), sinon d'après le rapport engagé. Sur les
+Heuliez, il faut appuyer sur le frein pour passer D ou R : c'est le script du bus qui veut ça.
 
 ## Limites connues
 
@@ -107,3 +115,8 @@ npm run pack      # fabrique dist/fr.yazouv.openomsi.streamDeckPlugin
 ```
 
 Le plugin Lua se recharge tout seul dans le jeu dès que tu enregistres le fichier.
+
+## Licence
+
+[MIT](LICENSE). `sdpi-components.js` (Corsair Memory Inc., MIT) et les icônes Material
+(Google, Apache 2.0) gardent leur licence.

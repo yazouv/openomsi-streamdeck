@@ -122,6 +122,26 @@ export class StopBrakeAction extends GameAction {
 	}
 }
 
+const GEARS = {
+	D: { label: "Marche", color: COLORS.green },
+	N: { label: "Neutre", color: COLORS.blue },
+	R: { label: "Arrière", color: COLORS.red },
+} as const;
+
+/** La boîte automatique : une touche par position, allumée quand elle est engagée. */
+@action({ UUID: "fr.yazouv.openomsi.gear" })
+export class GearAction extends GameAction {
+	look(s: Settings): Look {
+		const pos = (s.pos ?? "D") in GEARS ? (s.pos ?? "D") as keyof typeof GEARS : "D";
+		const g = GEARS[pos];
+		return { icon: "shifter", value: pos, label: g.label, on: game.bus?.selector === pos, color: g.color };
+	}
+	override onKeyDown(ev: KeyDownEvent<Settings>): Promise<void> {
+		const pos = ev.payload.settings.pos ?? "D";
+		return this.run(ev.action, `gear ${pos in GEARS ? pos : "D"}`);
+	}
+}
+
 const SIDES = {
 	left: { icon: "left", label: "Gauche" },
 	right: { icon: "right", label: "Droite" },

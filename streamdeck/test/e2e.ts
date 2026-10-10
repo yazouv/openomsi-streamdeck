@@ -173,6 +173,16 @@ await test("un trigger que le bus n'a pas est refusé", async () => {
 	assert.deepEqual(calls(), ["trigger C2_CP_BT_Kneeling"]);
 });
 
+await test("C2 : boîte auto D, R, N par automatic_*, position lue dans C2_Getriebe_Gangvorwahl", async () => {
+	await until("N au départ", () => game.bus?.selector === "N");
+	for (const pos of ["D", "R", "N"] as const) {
+		assert.equal(await game.send(`gear ${pos}`), true);
+		await until(pos, () => game.bus?.selector === pos);
+	}
+	assert.deepEqual(calls(), ["trigger automatic_D", "trigger automatic_R", "trigger automatic_N"]);
+	assert.equal(await game.send("gear P"), false);
+});
+
 await test("C2 : pas de frein d'arrêt à part (bus_dooraft y est la libération des portes)", async () => {
 	assert.equal(await game.send("stopbrake"), false);
 	assert.deepEqual(calls(), []);
@@ -192,6 +202,12 @@ await test("Heuliez GX427 : DEV = CG_active (pas le frein d'arrêt), frein d'arr
 	assert.deepEqual(calls(), ["trigger bus_dooraft"]);
 	await until("frein d'arrêt serré", () => game.bus?.stop_brake === true);
 	assert.ok((await game.triggers()).includes("cg_active"));
+	calls();
+	assert.equal(await game.send("gear D"), true);
+	await until("D (antrieb_getr_gangvorwahl = 4)", () => game.bus?.selector === "D");
+	assert.equal(await game.send("gear N"), true);
+	await until("N", () => game.bus?.selector === "N");
+	assert.deepEqual(calls(), ["trigger automatic_D", "trigger automatic_N"]);
 	call("__set_bus", "c2");
 	call("__fire", "vehicle", "C2");
 	await until("retour au C2", () => game.bus?.dev === false);

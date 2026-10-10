@@ -28,6 +28,7 @@ const actions: Record<string, Look> = {
 	lights: { icon: "lights", label: "Croisement" },
 	handbrake: { icon: "handbrake", label: "Frein park." },
 	engine: { icon: "power", label: "Moteur" },
+	gear: { icon: "shifter", value: "D", label: "Marche" },
 	horn: { icon: "horn", label: "Klaxon" },
 	interior: { icon: "bulb", label: "Éclairage" },
 	view: { icon: "eye", label: "Conducteur" },

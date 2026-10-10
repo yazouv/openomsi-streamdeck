@@ -19,9 +19,10 @@ local BUSES = {
     triggers = { "bus_doorfront0", "bus_doorfront0_off", "bus_doorfront1", "bus_doorfront1_off",
                  "bus_dooraft", "C2_CP_BT_Tuer_3", "C2_CP_BT_Tuer_3_off", "C2_CP_Tuerfreigabe_0",
                  "C2_CP_Tuerfreigabe_1", "C2_CP_BT_Kneeling", "C2_CP_BT_Kneeling_off", "horn",
-                 "cp_door_01_nothahn" },
+                 "cp_door_01_nothahn", "automatic_D", "automatic_N", "automatic_R" },
     leaves = 0,
-    vars = { C2_CP_BT_Tuerfreigabe = 0, C2_CP_AZ_Tuer_1 = 0,
+    gear_var = "C2_Getriebe_Gangvorwahl", gear_values = { R = 0, N = 1, D = 2 },
+    vars = { C2_CP_BT_Tuerfreigabe = 0, C2_CP_AZ_Tuer_1 = 0, C2_Getriebe_Gangvorwahl = 1,
              C2_Tuer_1_V_pos = 0, C2_Tuer_1_H_pos = 0, C2_Tuer_1_V_Gummi_pos = 0,
              C2_Tuer_2_V_pos = 0, C2_Tuer_2_H_pos = 0, C2_Tuer_3_V_pos = 0, C2_Tuer_3_H_pos = 0 },
     dev_var = "C2_CP_BT_Tuerfreigabe",
@@ -31,9 +32,10 @@ local BUSES = {
   gx427 = {
     triggers = { "bus_doorfront0", "bus_doorfront0_off", "bus_doorfront1", "bus_doorfront2",
                  "CG_active", "CG_active_off", "bus_dooraft", "bus_doorfront_all_close",
-                 "bus_SECU_off", "door0_drag" },
+                 "bus_SECU_off", "door0_drag", "automatic_D", "automatic_N", "automatic_R" },
+    gear_var = "antrieb_getr_gangvorwahl", gear_values = { R = 0, N = 1, D = 4 },
     leaves = 6,
-    vars = { DEV = 0, bremse_halte = 0 },
+    vars = { DEV = 0, bremse_halte = 0, antrieb_getr_gangvorwahl = 1 },
     dev_var = "DEV",
     dev_trigger = "CG_active",
     brake_trigger = "bus_dooraft",
@@ -50,6 +52,7 @@ for _, bus in pairs(BUSES) do
   bus.dev_var = bus.dev_var:lower()
   bus.dev_trigger = bus.dev_trigger:lower()
   bus.brake_trigger = bus.brake_trigger and bus.brake_trigger:lower()
+  bus.gear_var = bus.gear_var:lower()
 end
 
 local function set_bus(name)
@@ -165,6 +168,8 @@ omsi = {
     if n == current.dev_trigger then
       current.vars[current.dev_var] = current.vars[current.dev_var] == 0 and 1 or 0
     end
+    local pos = n:match("^automatic_([dnr])$")
+    if pos then current.vars[current.gear_var] = current.gear_values[pos:upper()] end
     if n == current.brake_trigger then
       current.vars.bremse_halte = current.vars.bremse_halte == 0 and 1 or 0
     end

@@ -26,6 +26,8 @@ export type Bus = {
 	doors?: boolean[];
 	/** Le DEV (déverrouillage / libération des portes) est actif. */
 	dev?: boolean;
+	/** La position de la boîte automatique. */
+	selector?: "D" | "N" | "R";
 	/** Les variables de script suivies (watch.txt). */
 	vars?: Record<string, number>;
 	indicator?: "off" | "left" | "right" | "hazard";
