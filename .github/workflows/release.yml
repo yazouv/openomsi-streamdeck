@@ -1,0 +1,53 @@
+name: Release
+
+# Pousser un tag vX.Y.Z (le même numéro que package.json et le manifest) publie la
+# version : build, tests, puis une release GitHub avec les deux fichiers à installer.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Publier la release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: streamdeck
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: streamdeck/package-lock.json
+
+      - run: npm ci
+
+      - name: Le tag correspond à la version
+        run: node scripts/check-version.mjs "$GITHUB_REF_NAME"
+
+      - run: npx tsc --noEmit -p .
+      - run: npm run build
+      - run: npm test
+      - run: npx streamdeck validate fr.yazouv.openomsi.sdPlugin
+      - run: npm run pack
+
+      - name: Release GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME"
+          --repo "$GITHUB_REPOSITORY"
+          --title "$GITHUB_REF_NAME"
+          --generate-notes
+          dist/fr.yazouv.openomsi.streamDeckPlugin
+          ../game/streamdeck.lua

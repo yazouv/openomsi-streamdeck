@@ -120,3 +120,12 @@ Le plugin Lua se recharge tout seul dans le jeu dès que tu enregistres le fichi
 
 [MIT](LICENSE). `sdpi-components.js` (Corsair Memory Inc., MIT) et les icônes Material
 (Google, Apache 2.0) gardent leur licence.
+
+## Contribuer
+
+Les modifications passent par une pull request vers `main` : la CI (build, tests de bout en
+bout, validation Elgato) doit passer et le propriétaire du dépôt doit l'approuver. Chaque PR
+fournit l'installeur à tester dans les artefacts de la CI.
+
+Publier une version : mettre le même numéro dans `streamdeck/package.json` (`1.4.0`) et le
+manifest (`1.4.0.0`), puis pousser le tag `v1.4.0` ; la release se crée toute seule.

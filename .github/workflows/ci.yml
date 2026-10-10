@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Ce nom est le check exigé par la protection de main : ne pas le changer sans elle.
+    name: Build et tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: streamdeck
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: streamdeck/package-lock.json
+
+      - run: npm ci
+
+      - name: Versions identiques (package.json et manifest)
+        run: node scripts/check-version.mjs
+
+      - name: Types
+        run: npx tsc --noEmit -p .
+
+      - name: Build
+        run: npm run build
+
+      - name: Images à jour dans le dépôt
+        run: git diff --exit-code -- fr.yazouv.openomsi.sdPlugin/imgs
+
+      - name: Tests de bout en bout (streamdeck.lua + plugin)
+        run: npm test
+
+      - name: Validation Elgato
+        run: npx streamdeck validate fr.yazouv.openomsi.sdPlugin
+
+      - name: Installeur
+        run: npm run pack
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: openomsi-streamdeck-${{ github.sha }}
+          path: |
+            streamdeck/dist/fr.yazouv.openomsi.streamDeckPlugin
+            game/streamdeck.lua
+          retention-days: 14
