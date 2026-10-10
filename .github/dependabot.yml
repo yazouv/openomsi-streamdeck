@@ -7,6 +7,15 @@ updates:
     groups:
       dependances:
         patterns: ["*"]
+    ignore:
+      # TypeScript 7 (réécrit en Go) n'a plus l'API JavaScript du compilateur dont
+      # @rollup/plugin-typescript a besoin : rester en 6.x tant que le plugin ne la supporte pas.
+      - dependency-name: typescript
+        versions: [">=7"]
+      # Le plugin tourne sous le Node 24 de Stream Deck (manifest : "Nodejs": "24") :
+      # les types de Node restent en 24.x.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
