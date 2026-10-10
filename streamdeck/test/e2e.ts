@@ -213,6 +213,30 @@ await test("Heuliez GX427 : DEV = CG_active (pas le frein d'arrêt), frein d'arr
 	await until("retour au C2", () => game.bus?.dev === false);
 });
 
+await test("Irisbus Citelis 12 : DEV = bus_doorall (frein d'arrêt serré), portes sur door_0 à door_5", async () => {
+	call("__set_bus", "citelis");
+	call("__fire", "vehicle", "Citelis 12");
+	await until("nouveau bus", () => game.bus?.stop_brake === false && game.bus?.doors?.length === 3);
+	calls();
+	assert.equal(await game.send("door 2"), true);
+	await until("porte 2 ouverte (door_2, door_3)", () => game.bus?.doors?.join() === "false,true,false");
+	assert.equal(await game.send("door 2"), true);
+	await until("porte 2 refermée", () => game.bus?.doors?.join() === "false,false,false");
+	assert.equal(await game.send("dev"), true);
+	assert.equal(game.bus?.dev, false, "sans frein d'arrêt, le bus refuse le DEV");
+	assert.equal(await game.send("stopbrake"), true);
+	await until("frein d'arrêt serré", () => game.bus?.stop_brake === true);
+	assert.equal(await game.send("dev"), true);
+	await until("DEV actif", () => game.bus?.dev === true);
+	assert.equal(await game.send("dev"), true);
+	await until("DEV coupé", () => game.bus?.dev === false);
+	assert.deepEqual(calls(), ["trigger bus_doorfront1", "trigger bus_doorfront1", "trigger bus_doorall",
+		"trigger bus_dooraft", "trigger bus_doorall", "trigger bus_doorall"]);
+	call("__set_bus", "c2");
+	call("__fire", "vehicle", "C2");
+	await until("retour au C2", () => game.bus?.stop_brake === undefined && game.bus?.doors?.length === 3);
+});
+
 await test("clignotant gauche, puis un 2e appui l'éteint", async () => {
 	assert.equal(await game.send("indicator left"), true);
 	await until("gauche", () => game.bus?.indicator === "left");

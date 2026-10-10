@@ -99,10 +99,12 @@ local function door_trigger(n)
 end
 
 -- Le bouton DEV : CG_active sur les bus français (Heuliez, Iveco, MAN...). Le C2 n'en a
--- pas ; sa libération des portes (Türfreigabe) est sur bus_dooraft.
+-- pas ; sa libération des portes (Türfreigabe) est sur bus_dooraft. L'Irisbus Citelis
+-- n'a ni l'un ni l'autre : son DEV est le bouton « DoorAll » (bus_doorall).
 local function dev_trigger()
   if has("CG_active") then return "CG_active" end
   if has_like("tuerfreigabe") and has("bus_dooraft") then return "bus_dooraft" end
+  if has("bus_doorall") then return "bus_doorall" end
   return nil
 end
 
@@ -146,8 +148,10 @@ local function door_count()
 end
 
 -- Chaque porte ouverte ou non : par les variables de ses vantaux quand le bus les nomme
--- par porte, sinon d'après door_0, door_1... (deux vantaux par porte quand il y en a deux
--- fois plus que de portes, un sinon) ; nil quand on ne peut pas les répartir.
+-- par porte, sinon d'après door_0, door_1... (deux vantaux par porte quand il y en a au
+-- moins deux fois plus que de portes, un sinon) ; nil quand on ne peut pas les répartir.
+-- Le Citelis 12 déclare door_0 à door_7 pour 3 portes : door_6 et door_7 servent au
+-- Citelis 18 et sont ignorées.
 local function doorways()
   local count = door_count()
   if count == 0 then return nil end
@@ -164,7 +168,7 @@ local function doorways()
   end
   local leaves = omsi.bus.doors() or {}
   local per
-  if #leaves == 2 * count then per = 2 elseif #leaves == count then per = 1 else return nil end
+  if #leaves >= 2 * count then per = 2 elseif #leaves == count then per = 1 else return nil end
   local out = {}
   for n = 1, count do
     local open = false
