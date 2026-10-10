@@ -1,0 +1,233 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+	"Name": "openOMSI",
+	"Version": "1.2.0.0",
+	"Author": "yazouv",
+	"Description": "Contrôle ton bus dans openOMSI : portes, clignotants, phares, frein de parking, moteur, klaxon, vues, et l'état du bus en direct sur les touches.",
+	"UUID": "fr.yazouv.openomsi",
+	"Icon": "imgs/plugin/icon",
+	"Category": "openOMSI",
+	"CategoryIcon": "imgs/plugin/category",
+	"CodePath": "bin/plugin.js",
+	"SDKVersion": 3,
+	"Nodejs": {
+		"Version": "24",
+		"Debug": "enabled"
+	},
+	"OS": [
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		},
+		{
+			"Platform": "mac",
+			"MinimumVersion": "13"
+		}
+	],
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"Actions": [
+		{
+			"UUID": "fr.yazouv.openomsi.door",
+			"Name": "Porte",
+			"Tooltip": "Ouvre ou ferme la porte 1, 2, 3, 4 (comme les touches ÷ × du pavé numérique) ou toutes.",
+			"Icon": "imgs/actions/door/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/door.html",
+			"States": [
+				{
+					"Image": "imgs/actions/door/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.dev",
+			"Name": "DEV (déverrouillage portes)",
+			"Tooltip": "Le bouton DEV (CG active) des bus français : Heuliez, Iveco, MAN... Sur le Citaro C2 : la libération des portes.",
+			"Icon": "imgs/actions/dev/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/dev/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.stopbrake",
+			"Name": "Frein d'arrêt",
+			"Tooltip": "Le frein d'arrêt (break valve) : serre ou desserre, comme la touche − du pavé numérique. Rouge quand il est serré.",
+			"Icon": "imgs/actions/stopbrake/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/stopbrake/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.indicator",
+			"Name": "Clignotant",
+			"Tooltip": "Clignotant gauche, droit ou warning ; un 2e appui l'éteint.",
+			"Icon": "imgs/actions/indicator/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/indicator.html",
+			"States": [
+				{
+					"Image": "imgs/actions/indicator/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.lights",
+			"Name": "Phares",
+			"Tooltip": "Veilleuses, feux de croisement ou de route.",
+			"Icon": "imgs/actions/lights/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/lights.html",
+			"States": [
+				{
+					"Image": "imgs/actions/lights/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.handbrake",
+			"Name": "Frein de parking",
+			"Tooltip": "Serre ou desserre le frein de parking.",
+			"Icon": "imgs/actions/handbrake/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/handbrake/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.engine",
+			"Name": "Moteur",
+			"Tooltip": "Démarre ou coupe le bus (comme Maj+U : batterie, contact, moteur).",
+			"Icon": "imgs/actions/engine/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/engine/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.horn",
+			"Name": "Klaxon",
+			"Tooltip": "Klaxonne tant que la touche est enfoncée.",
+			"Icon": "imgs/actions/horn/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/horn/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.interior",
+			"Name": "Éclairage intérieur",
+			"Tooltip": "Allume ou éteint l'éclairage passagers.",
+			"Icon": "imgs/actions/interior/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/interior/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.view",
+			"Name": "Vue",
+			"Tooltip": "Change de caméra : conducteur, passager, extérieur, libre, à pied.",
+			"Icon": "imgs/actions/view/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/view.html",
+			"States": [
+				{
+					"Image": "imgs/actions/view/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.pause",
+			"Name": "Pause",
+			"Tooltip": "Met le jeu en pause (reprendre : touche P du clavier).",
+			"Icon": "imgs/actions/pause/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/pause/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.custom",
+			"Name": "Bouton du bus",
+			"Tooltip": "N'importe quel bouton (trigger) du bus, choisi dans la liste, ou une action de keyboard.cfg ; peut s'allumer selon une variable.",
+			"Icon": "imgs/actions/custom/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/custom.html",
+			"States": [
+				{
+					"Image": "imgs/actions/custom/key",
+					"ShowTitle": false
+				}
+			]
+		},
+		{
+			"UUID": "fr.yazouv.openomsi.info",
+			"Name": "Affichage",
+			"Tooltip": "Vitesse, limite, retard, prochain arrêt, heure, ligne, passagers, rapport, carburant ou demande d'arrêt.",
+			"Icon": "imgs/actions/info/icon",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/info.html",
+			"States": [
+				{
+					"Image": "imgs/actions/info/key",
+					"ShowTitle": false
+				}
+			]
+		}
+	]
+}

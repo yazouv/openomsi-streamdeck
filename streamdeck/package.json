@@ -1,0 +1,31 @@
+{
+  "name": "openomsi-streamdeck",
+  "version": "1.2.0",
+  "description": "Plugin Stream Deck pour openOMSI",
+  "scripts": {
+    "images": "node scripts/make-images.ts",
+    "build": "node scripts/make-images.ts && rollup -c",
+    "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart fr.yazouv.openomsi\"",
+    "link": "streamdeck link fr.yazouv.openomsi.sdPlugin",
+    "pack": "streamdeck pack fr.yazouv.openomsi.sdPlugin --output dist --force",
+    "test": "node test/e2e.ts"
+  },
+  "dependencies": {
+    "@elgato/streamdeck": "^3.0.2"
+  },
+  "devDependencies": {
+    "@elgato/cli": "^1.10.2",
+    "@resvg/resvg-js": "^2.6.2",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/node": "^24.19.2",
+    "fengari": "^0.1.5",
+    "rollup": "^4.64.5",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3"
+  },
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8" />
+	<script src="sdpi-components.js"></script>
+</head>
+<body>
+	<sdpi-item label="Type">
+		<sdpi-select setting="kind" default="trigger">
+			<option value="trigger">Bouton du bus (trigger)</option>
+			<option value="action">Action du bus (keyboard.cfg [vehicles])</option>
+			<option value="game">Action du jeu (keyboard.cfg [game])</option>
+		</sdpi-select>
+	</sdpi-item>
+	<sdpi-item label="Bouton">
+		<sdpi-select setting="pick" datasource="triggers" show-refresh placeholder="Choisis dans la liste" loading="Chargement..."></sdpi-select>
+	</sdpi-item>
+	<sdpi-item label="Ou nom">
+		<sdpi-textfield setting="name" placeholder="tapé à la main (prioritaire)"></sdpi-textfield>
+	</sdpi-item>
+	<sdpi-item label="Appui">
+		<sdpi-select setting="mode" default="press">
+			<option value="press">Appuyer puis relâcher</option>
+			<option value="hold">Tenir tant que la touche est enfoncée</option>
+		</sdpi-select>
+	</sdpi-item>
+	<sdpi-item label="Libellé">
+		<sdpi-textfield setting="label" placeholder="texte sur la touche"></sdpi-textfield>
+	</sdpi-item>
+	<sdpi-item label="Allumée si">
+		<sdpi-textfield setting="var" placeholder="variable de script (facultatif)"></sdpi-textfield>
+	</sdpi-item>
+	<p style="color:#9aa0a6;font-size:9pt;margin:8px 16px">La liste montre les boutons du bus que tu conduis : lance openOMSI, monte dans le bus, puis clique sur ↻.
+	« Allumée si » : la touche s'allume quand cette variable n'est pas à 0 (ex. <b>DEV</b>, <b>CG_active</b>, <b>C2_CP_BT_Tuerfreigabe</b>).</p>
+	<p style="color:#9aa0a6;font-size:9pt;margin:12px 16px">Il faut le plugin <b>streamdeck.lua</b> dans le dossier <b>plugins</b> d'openOMSI.</p>
+</body>
+</html>

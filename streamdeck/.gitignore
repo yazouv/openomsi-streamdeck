@@ -1,0 +1,5 @@
+node_modules/
+dist/
+fr.yazouv.openomsi.sdPlugin/bin/
+fr.yazouv.openomsi.sdPlugin/logs/
+logs/
