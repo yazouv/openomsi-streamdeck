@@ -13,7 +13,8 @@ local bus = {
 local interior = 0
 local view = "driver"
 
--- Deux bus : le Citaro C2 de GPM et un Heuliez GX327 (les noms de leurs vrais scripts).
+-- Trois bus : le Citaro C2 de GPM, un Heuliez GX427 et l'Irisbus Citelis 12 de PDO (les
+-- noms de leurs vrais scripts).
 local BUSES = {
   c2 = {
     triggers = { "bus_doorfront0", "bus_doorfront0_off", "bus_doorfront1", "bus_doorfront1_off",
@@ -38,6 +39,21 @@ local BUSES = {
     vars = { DEV = 0, bremse_halte = 0, antrieb_getr_gangvorwahl = 1 },
     dev_var = "DEV",
     dev_trigger = "CG_active",
+    brake_trigger = "bus_dooraft",
+  },
+  -- Irisbus Citelis 12 (PDO, Script/C12_Doors_3D_IST.osc) : DEV = bus_doorall (« DoorAll »),
+  -- seulement frein d'arrêt serré ; door_0 à door_7 pour 3 portes (door_6/7 : le Citelis 18)
+  citelis = {
+    triggers = { "bus_doorfront0", "bus_doorfront0_off", "bus_doorfront0_lock",
+                 "bus_doorfront1", "bus_doorfront1_self", "bus_doorfront2", "bus_doorfront2_self",
+                 "bus_doorall", "bus_doorall_off", "bus_dooraft", "bus_doorfront_all_close",
+                 "automatic_D", "automatic_N", "automatic_R" },
+    gear_var = "antrieb_getr_gangvorwahl", gear_values = { R = 0, N = 1, D = 2 },
+    leaves = 8,
+    vars = { DEV = 0, bremse_halte = 0, antrieb_getr_gangvorwahl = 1 },
+    dev_var = "DEV",
+    dev_trigger = "bus_doorall",
+    dev_needs_brake = true,
     brake_trigger = "bus_dooraft",
   },
 }
@@ -165,7 +181,7 @@ omsi = {
         end
       end
     end
-    if n == current.dev_trigger then
+    if n == current.dev_trigger and (not current.dev_needs_brake or current.vars.bremse_halte ~= 0) then
       current.vars[current.dev_var] = current.vars[current.dev_var] == 0 and 1 or 0
     end
     local pos = n:match("^automatic_([dnr])$")

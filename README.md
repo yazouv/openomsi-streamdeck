@@ -53,11 +53,11 @@ détection automatique des portes d'openOMSI (qui se trompe sur certains mods) :
 | --- | --- |
 | Porte 1, 2, 3, 4 | `bus_doorfront0`, `bus_doorfront1`, `bus_doorfront2`, `bus_doorfront3` ; s'il manque, un trigger qui finit par `Tuer_<n>` ou `door_<n>` (Citaro C2 : porte 3 = `C2_CP_BT_Tuer_3`) |
 | Toutes | la commande « toutes les portes » d'openOMSI |
-| DEV | `CG_active` (Heuliez GX127/GX327/GX427, Iveco, MAN Lion's City G…) ; sur le Citaro C2, qui n'en a pas : `bus_dooraft` (sa libération des portes) |
+| DEV | `CG_active` (Heuliez GX127/GX327/GX427, Iveco, MAN Lion's City G…) ; sur le Citaro C2, qui n'en a pas : `bus_dooraft` (sa libération des portes) ; sur l'Irisbus Citelis : `bus_doorall` (son bouton « DoorAll ») |
 | Frein d'arrêt | `bus_dooraft` (la touche − du pavé numérique) ; pas sur le C2, où cette touche est la libération des portes |
 
-Sur les Heuliez, `CG_active` n'active le DEV que contact mis **et frein d'arrêt serré** :
-c'est le script du bus qui veut ça.
+Sur les Heuliez et le Citelis, le DEV ne s'active que contact mis **et frein d'arrêt
+serré** : c'est le script du bus qui veut ça.
 
 openOMSI rend les noms de triggers en minuscules (`cg_active`) : c'est normal, OMSI ne fait
 pas la différence.
@@ -85,7 +85,7 @@ Heuliez, il faut appuyer sur le frein pour passer D ou R : c'est le script du bu
   commandes : utilise alors une action personnalisée.
 - **Portes une par une** : l'état « ouverte » d'une porte précise vient des variables
   `…Tuer_<n>_V_pos` / `_H_pos` quand le bus en a (C2), sinon des vantaux `door_0`,
-  `door_1`… (deux par porte quand il y en a deux fois plus que de portes). Sur un bus
+  `door_1`… (deux par porte quand il y en a au moins deux fois plus que de portes). Sur un bus
   exotique la touche ne s'allume pas, mais elle marche ; « Toutes » reste juste.
 
 ## Comment ça marche
@@ -127,5 +127,5 @@ Les modifications passent par une pull request vers `main` : la CI (build, tests
 bout, validation Elgato) doit passer et le propriétaire du dépôt doit l'approuver. Chaque PR
 fournit l'installeur à tester dans les artefacts de la CI.
 
-Publier une version : mettre le même numéro dans `streamdeck/package.json` (`1.4.0`) et le
-manifest (`1.4.0.0`), puis pousser le tag `v1.4.0` ; la release se crée toute seule.
+Publier une version : mettre le même numéro dans `streamdeck/package.json` (`1.4.1`) et le
+manifest (`1.4.1.0`), puis pousser le tag `v1.4.1` ; la release se crée toute seule.
